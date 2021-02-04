@@ -1,2 +1,2 @@
 # HelperClasses
-A number of classes I wrote that I found helpful in multiple scenarios.
+A number of cSharp classes I wrote that I found helpful in multiple scenarios. Some of them will probably have better version elsewhere of them written else where. But they are here...
