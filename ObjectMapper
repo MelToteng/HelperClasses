@@ -1,0 +1,69 @@
+public class ObjectMapper<TSender,TReceiver> where TSender:class where TReceiver:class
+    {
+        public static TReceiver CopyPropertyValues(TSender sender, TReceiver receiver) 
+        {
+			try
+			{
+				var senderProps = sender.GetType().GetProperties()
+					.Where(x => x.CanRead).ToList();
+
+				var receiverProps = receiver.GetType().GetProperties()
+					.Where(x => x.CanWrite).ToList();
+
+				foreach (var sourceProp in senderProps)
+				{
+					if (receiverProps.Any(x => x.Name == sourceProp.Name)) 
+					{
+						var p = receiverProps.First(x => x.Name == sourceProp.Name);
+
+						if (p.CanWrite)
+							p.SetValue(receiver, sourceProp.GetValue(sender, null), null);
+					}
+				}
+
+				return receiver;
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+        }
+
+		public static TReceiver CopyPropertyValuesExcept(TSender sender, TReceiver receiver, List<string> properties)
+		{
+			try
+			{
+				var senderProps = sender.GetType().GetProperties()
+					.Where(x => x.CanRead).ToList();
+
+				var receiverProps = receiver.GetType().GetProperties()
+					.Where(x => x.CanWrite).ToList();
+
+				foreach (var item in properties)
+				{
+					senderProps.RemoveAll(x => x.Name == item);
+
+					receiverProps.RemoveAll(x => x.Name == item);
+				}
+
+				foreach (var sourceProp in senderProps)
+				{
+					if (receiverProps.Any(x => x.Name == sourceProp.Name))
+					{
+						var p = receiverProps.First(x => x.Name == sourceProp.Name);
+
+						if (p.CanWrite)
+							p.SetValue(receiver, sourceProp.GetValue(sender, null), null);
+					}
+				}
+
+				return receiver;
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
+	}
